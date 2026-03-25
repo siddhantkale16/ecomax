@@ -34,7 +34,7 @@ export function Navbar() {
           </Link>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link href="/admin/products" className={linkClass("/")}>
+          <Link href="/admin/products" className={linkClass("/admin/products")}>
             Admin
           </Link>
         </NavigationMenuItem>

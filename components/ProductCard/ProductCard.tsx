@@ -11,7 +11,7 @@ export const ProductCard = ({ productData }: { productData: Product }) => {
 
       {/* CLICKABLE AREA */}
       <Link
-        href={`/products/${productData.id}`}
+        href={`/products/${productData._id}`}
         className="flex flex-col items-center text-center"
       >
         {/* Image */}
@@ -40,20 +40,21 @@ export const ProductCard = ({ productData }: { productData: Product }) => {
         </div>
 
         {/* Price & Rating */}
-        <div className="flex justify-between w-full px-1 items-center mb-2 flex-shrink-0 text-sm">
+        <div className="flex justify-between w-full px-1 items-center mb-2 shrink-0 text-sm">
           <p className="text-green-600 font-bold">
             ${productData.price.toFixed(2)}
           </p>
-          {productData.rating && (
+         
             <p className="text-yellow-600">
-              ⭐ {productData.rating.rate} ({productData.rating.count})
+
+              {productData.rating ? (` ⭐ ${productData.rating.rate} (${productData.rating.count})  `):"Not Rated"}
             </p>
-          )}
+        
         </div>
       </Link>
 
       {/* NON-CLICKABLE (Cart stays outside) */}
-      <div className="mt-auto flex-shrink-0">
+      <div className="mt-auto shrink-0">
         <CartButton />
       </div>
 

@@ -47,11 +47,11 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
             <p className="text-3xl font-bold text-green-600">
               ${product.price.toFixed(2)}
             </p>
-            {product.rating && (
+            {product.rating ? (
               <p className="text-yellow-500 text-lg">
                 ⭐ {product.rating.rate} <span className="text-gray-400 text-sm">({product.rating.count} reviews)</span>
               </p>
-            )}
+            ):"Not Rated"}
           </div>
 
           
@@ -67,7 +67,7 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
 export const generateStaticParams = async () => {
   const res = await fetch("http://localhost:3000/api/products");
   const products = await res.json();
-  return products.map((product: { id: string }) => ({
-    id: product.id.toString(),
+  return products.map((product: { _id: string }) => ({
+    id: product._id.toString(),
   }));
 };

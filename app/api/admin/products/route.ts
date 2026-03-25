@@ -3,7 +3,7 @@ export async function GET(){
     try{
         const db = await getDb();
         const collection = db.collection("products");
-        const products =  await collection.find({},).project({
+        const products =  await collection.find({adminAdded:true},).project({
           _id:1,
           title:1,
           price:1,

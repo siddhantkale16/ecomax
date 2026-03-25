@@ -7,9 +7,13 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu"
+import { useCart } from "@/context/CartContext"
 
 export function Navbar() {
   const pathname = usePathname()
+  const { cart } = useCart()
+
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0)
 
   const linkClass = (path: string) =>
     `transition-all duration-200 ${
@@ -33,12 +37,12 @@ export function Navbar() {
             Home
           </Link>
         </NavigationMenuItem>
+
         <NavigationMenuItem>
           <Link href="/admin/products" className={linkClass("/admin/products")}>
             Admin
           </Link>
         </NavigationMenuItem>
-        
 
         <NavigationMenuItem>
           <Link href="/products" className={linkClass("/products")}>
@@ -47,8 +51,15 @@ export function Navbar() {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <Link href="/cart" className={linkClass("/cart")}>
-            Cart
+          <Link href="/cart" className="relative">
+            <span className={linkClass("/cart")}>Cart</span>
+
+            {/* Badge */}
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-4 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                {totalItems}
+              </span>
+            )}
           </Link>
         </NavigationMenuItem>
       </NavigationMenuList>

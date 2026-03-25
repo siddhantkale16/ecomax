@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter, Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Footer, Navbar } from "@/components/index"
+import { CartProvider } from "@/context/CartContext";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 const poppins = Poppins({ subsets: ["latin"], weight: ["600", "700"], display: "swap" });
@@ -24,12 +25,15 @@ export default function RootLayout({
       className={cn("h-full", "antialiased")}
     >
       <body className={`${poppins.className} min-h-full flex flex-col`}>
+         <CartProvider>
         <Navbar />
         <main className="flex-1 pt-20">
         {children}
         </main>
         <Footer/>
+        </CartProvider>
         </body>
+
         
     </html>
   );

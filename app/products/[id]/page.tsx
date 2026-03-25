@@ -56,7 +56,7 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
 
           
           <div className="flex justify-start w-1/3">
-            <CartButton />
+            <CartButton productId={product._id}/>
           </div>
         </div>
       </section>

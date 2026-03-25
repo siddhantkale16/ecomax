@@ -4,8 +4,11 @@ import { Product } from "@/types/Product";
 import Image from "next/image";
 import Link from "next/link";
 import { CartButton } from "../CartButton/CartButton";
+import { useCart } from "@/context/CartContext";
 
 export const ProductCard = ({ productData }: { productData: Product }) => {
+  
+
   return (
     <Card className="w-full p-3 bg-linear-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-transform duration-300 flex flex-col text-center h-100">
 
@@ -27,7 +30,7 @@ export const ProductCard = ({ productData }: { productData: Product }) => {
 
         {/* Category */}
         <div className="mb-3">
-          <span className="inline-block bg-emerald-400 text-white text-xs font-medium px-2 py-1 rounded-full">
+          <span className="inline-block bg-emerald-400 text-white text-xs font-medium px-2 py-2 rounded-full">
             {productData.category}
           </span>
         </div>
@@ -44,20 +47,20 @@ export const ProductCard = ({ productData }: { productData: Product }) => {
           <p className="text-green-600 font-bold">
             ${productData.price.toFixed(2)}
           </p>
-         
-            <p className="text-yellow-600">
-
-              {productData.rating ? (` ⭐ ${productData.rating.rate} (${productData.rating.count})  `):"Not Rated"}
-            </p>
-        
+          <p className="text-yellow-600">
+            {productData.rating
+              ? `⭐ ${productData.rating.rate} (${productData.rating.count})`
+              : "Not Rated"}
+          </p>
         </div>
       </Link>
 
-      {/* NON-CLICKABLE (Cart stays outside) */}
+      {/* OLD CART BUTTON STYLE (works with CartContext) */}
       <div className="mt-auto shrink-0">
-        <CartButton />
+        <CartButton
+          productId={productData._id}
+        />
       </div>
-
     </Card>
   );
 };

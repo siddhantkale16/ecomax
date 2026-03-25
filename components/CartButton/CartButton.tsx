@@ -1,15 +1,31 @@
 "use client";
-import { useState } from "react";
+import { useCart } from "@/context/CartContext";
+import { ObjectId } from "mongodb";
 
-export const CartButton = () => {
-  const [count, setCount] = useState(0);
+interface CartButtonProps {
+  productId: ObjectId;
+}
+
+export const CartButton = ({ productId }: CartButtonProps) => {
+  const { getItemQuantity, addToCart, updateQuantity, removeFromCart } = useCart();
+  const count = getItemQuantity(productId);
+
+  const handleAdd = () => addToCart(productId, 1);
+  const handleIncrease = () => addToCart(productId, 1);
+  const handleDecrease = () => {
+    if (count <= 1) {
+      removeFromCart(productId);
+    } else {
+      updateQuantity(productId, count - 1);
+    }
+  };
 
   return count === 0 ? (
     <button
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        setCount(1);
+        handleAdd();
       }}
       className="w-full bg-emerald-400 hover:bg-emerald-600 text-white font-semibold py-2 rounded-lg transition"
     >
@@ -20,7 +36,7 @@ export const CartButton = () => {
       <button
         onClick={(e) => {
           e.stopPropagation();
-          setCount((prev) => Math.max(0, prev - 1));
+          handleDecrease();
         }}
         className="w-1/3 text-lg font-bold bg-red-500 text-white rounded"
       >
@@ -32,7 +48,7 @@ export const CartButton = () => {
       <button
         onClick={(e) => {
           e.stopPropagation();
-          setCount((prev) => prev + 1);
+          handleIncrease();
         }}
         className="w-1/3 text-lg font-bold bg-green-500 text-white rounded"
       >

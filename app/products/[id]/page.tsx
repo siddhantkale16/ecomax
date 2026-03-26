@@ -13,7 +13,6 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)] w-full p-4">
       
-      {/* 2. Added max-w-6xl to prevent the section from becoming too wide and items-center for vertical alignment */}
       <section className="w-9/10 flex flex-col md:flex-row items-center justify-center mx-auto gap-10  bg-white dark:bg-gray-800 p-8">
         
         {/* Product Image */}
@@ -29,7 +28,6 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
 
         {/* Product Info */}
         <div className="flex flex-col justify-center w-full md:w-1/2">
-          {/* Category Chip */}
           <span className="inline-block bg-emerald-400 text-white text-xs font-medium px-3 py-1 rounded-full mb-3 w-fit">
             {product.category}
           </span>

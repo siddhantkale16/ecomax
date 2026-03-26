@@ -17,8 +17,6 @@ export const AdminProductCard = ({ productData }: { productData: Product }) => {
 
   return (
     <Card className="w-full p-3 bg-linear-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-transform duration-300 flex flex-col text-center h-100">
-      
-      {/* KEEP SAME LINK + UI */}
       <Link
         href={`/products/${productData._id}`}
         className="flex flex-col items-center text-center"

@@ -18,11 +18,15 @@ export default async function AdminProductsPage() {
       </div>
 
       {/* Products Grid */}
+      { products.length?
       <div className="w-2/3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {products.map((product) => (
+      {
+        
+        products.map((product) => (
           <AdminProductCard key={product._id as unknown as string} productData={product} />
-        ))}
-      </div>
+        ))
+      }
+      </div>:<div className="text-gray-800 flex justify-center w-full items-center text-xl"><p>No Added Products.</p></div>}
     </section>
   );
 }

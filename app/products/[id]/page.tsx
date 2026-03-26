@@ -5,10 +5,12 @@ import Image from "next/image";
 export default async function ProductDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const res = await fetch(`http://localhost:3000/api/products/${id}`, { cache: "no-store" });
+  if(!res.ok){
+    return notFound();
+  }
   const product: Product = await res.json();
 
   return (
-    // 1. min-h-screen ensures it centers vertically on the whole page if there's little content
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)] w-full p-4">
       
       {/* 2. Added max-w-6xl to prevent the section from becoming too wide and items-center for vertical alignment */}
@@ -62,7 +64,9 @@ export default async function ProductDetailsPage({ params }: { params: Promise<{
       </section>
     </div>
   );
-}
+}import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import { notFound } from "next/navigation";
 
 export const generateStaticParams = async () => {
   const res = await fetch("http://localhost:3000/api/products");

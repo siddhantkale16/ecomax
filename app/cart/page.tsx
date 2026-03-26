@@ -37,7 +37,7 @@ export default function CartPage() {
   if (cart.length === 0)
   return (
     <div className="flex flex-col items-center justify-center h-[70vh] text-center px-4">
-      <div className="text-6xl mb-6 animate-bounce">🛒</div>
+      <div className="text-6xl mb-6">🛒</div>
       <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800 dark:text-gray-100">
         Your cart is empty
       </h2>
@@ -120,10 +120,13 @@ export default function CartPage() {
             <span>Total Price:</span>
             <span>${totalPrice.toFixed(2)}</span>
           </div>
-
+          <Link href={"/checkout"} className="cursor-pointer">
           <button className="w-full py-3 bg-emerald-500 text-white font-semibold rounded-lg hover:bg-emerald-600 transition">
+            
             Checkout
+            
           </button>
+          </Link>
 
           <button
             onClick={clearCart}

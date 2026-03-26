@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Product } from "@/types/Product";
-import { ProductCard } from "@/components/ProductCard/ProductCard";
+import { AdminProductCard } from "@/components/AdminProductCard/AdminProductCard";
 
 export default async function AdminProductsPage() {
   const res = await fetch("http://localhost:3000/api/admin/products", { cache: "no-store" });
@@ -20,7 +20,7 @@ export default async function AdminProductsPage() {
       {/* Products Grid */}
       <div className="w-2/3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {products.map((product) => (
-          <ProductCard key={product._id as unknown as string} productData={product} />
+          <AdminProductCard key={product._id as unknown as string} productData={product} />
         ))}
       </div>
     </section>

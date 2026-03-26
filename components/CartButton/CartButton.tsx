@@ -1,6 +1,7 @@
 "use client";
 import { useCart } from "@/context/CartContext";
 import { ObjectId } from "mongodb";
+import { Button } from "../ui/button";
 
 interface CartButtonProps {
   productId: ObjectId;
@@ -21,39 +22,39 @@ export const CartButton = ({ productId }: CartButtonProps) => {
   };
 
   return count === 0 ? (
-    <button
+    <Button
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
         handleAdd();
       }}
-      className="w-full bg-emerald-400 hover:bg-emerald-600 text-white font-semibold py-2 rounded-lg transition"
+      className=" cursor-pointer w-full bg-emerald-400 hover:bg-emerald-600 text-white font-semibold py-5 rounded-lg transition"
     >
       Add to Cart
-    </button>
+    </Button>
   ) : (
     <div className="w-full flex justify-between items-center border rounded-lg px-3 py-2 bg-gray-100 dark:bg-gray-700">
-      <button
+      <Button
         onClick={(e) => {
           e.stopPropagation();
           handleDecrease();
         }}
-        className="w-1/3 text-lg font-bold bg-red-500 text-white rounded"
+        className="w-1/3 text-lg font-bold bg-red-500 text-white rounded cursor-pointer"
       >
         -
-      </button>
+      </Button>
 
       <span className="font-medium text-center w-1/3">{count}</span>
 
-      <button
+      <Button
         onClick={(e) => {
           e.stopPropagation();
           handleIncrease();
         }}
-        className="w-1/3 text-lg font-bold bg-green-500 text-white rounded"
+        className="w-1/3 text-lg font-bold bg-green-500 text-white rounded cursor-pointer"
       >
         +
-      </button>
+      </Button>
     </div>
   );
 };

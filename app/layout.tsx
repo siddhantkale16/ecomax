@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Inter, Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Footer, Navbar } from "@/components/index"
 import { CartProvider } from "@/context/CartContext";
+import { DiscountProvider } from "@/context/DiscountContext";
 
-const inter = Inter({ subsets: ["latin"], display: "swap" });
-const poppins = Poppins({ subsets: ["latin"], weight: ["600", "700"], display: "swap" });
-
+const font = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "Ecomax – Your One-Stop Online Store",
@@ -29,13 +28,15 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased")}
     >
-      <body className={`${poppins.className} min-h-full flex flex-col`}>
+      <body className={`${font.className} min-h-full flex flex-col bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50`}>
          <CartProvider>
+          <DiscountProvider>
         <Navbar />
         <main className="flex-1 pt-20">
         {children}
         </main>
         <Footer/>
+        </DiscountProvider>
         </CartProvider>
         </body>
 

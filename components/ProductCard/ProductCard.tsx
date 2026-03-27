@@ -4,21 +4,18 @@ import { Product } from "@/types/Product";
 import Image from "next/image";
 import Link from "next/link";
 import { CartButton } from "../CartButton/CartButton";
-import { useCart } from "@/context/CartContext";
+import { ProductPrice } from "../ProductPrice";
 
 export const ProductCard = ({ productData }: { productData: Product }) => {
-  
-
   return (
-    <Card className="w-full p-3 bg-linear-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-transform duration-300 flex flex-col text-center h-100">
-
+    <Card className="w-full p-6 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl border border-white/60 dark:border-zinc-800/60 rounded-3xl shadow-xl hover:shadow-2xl hover:-tranzinc-y-2 transition-all duration-500 flex flex-col text-center min-h-[460px] group relative overflow-hidden">
       {/* CLICKABLE AREA */}
       <Link
         href={`/products/${productData._id}`}
-        className="flex flex-col items-center text-center"
+        className="flex flex-col items-center text-center flex-1"
       >
         {/* Image */}
-        <div className="w-40 h-40 relative mb-4 mx-auto">
+        <div className="w-44 h-44 relative mb-6 mx-auto flex-shrink-0 group-hover:scale-110 transition-transform duration-500">
           <Image
             src={productData.image}
             alt={productData.title + " image"}
@@ -30,36 +27,39 @@ export const ProductCard = ({ productData }: { productData: Product }) => {
 
         {/* Category */}
         <div className="mb-3">
-          <span className="inline-block bg-emerald-400 text-white text-xs font-medium px-2 py-2 rounded-full">
+          <span className="inline-block bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
             {productData.category}
           </span>
         </div>
 
-        {/* Title + Description */}
-        <div className="flex flex-col mb-4 h-10">
-          <h2 className="text-md font-semibold text-gray-800 dark:text-gray-100 line-clamp-2 overflow-hidden">
+        {/* Title */}
+        <div className="mb-4">
+          <h2 className="text-sm font-bold text-gray-800 dark:text-gray-100 line-clamp-2 overflow-hidden px-2">
             {productData.title}
           </h2>
         </div>
 
         {/* Price & Rating */}
-        <div className="flex justify-between w-full px-1 items-center mb-2 shrink-0 text-sm">
-          <p className="text-green-600 font-bold">
-            ${productData.price.toFixed(2)}
-          </p>
-          <p className="text-yellow-600">
-            {productData.rating
-              ? `⭐ ${productData.rating.rate} (${productData.rating.count})`
-              : "Not Rated"}
-          </p>
+        <div className="flex justify-between w-full px-2 items-center mb-4 mt-auto">
+          <ProductPrice basePrice={productData.price} productDiscount={productData.discount} size="lg" />
+          
+          <div className="flex items-center gap-1 text-yellow-500 font-bold text-sm">
+            {productData.rating?.rate && productData.rating.rate > 0 ? (
+              <>
+                <span>⭐</span>
+                <span>{productData.rating.rate}</span>
+                <span className="text-gray-400 text-[10px] font-normal">({productData.rating.count})</span>
+              </>
+            ) : (
+              <span className="text-gray-400 font-medium text-xs">Not Rated</span>
+            )}
+          </div>
         </div>
       </Link>
 
-      {/* OLD CART BUTTON STYLE (works with CartContext) */}
-      <div className="mt-auto shrink-0">
-        <CartButton
-          productId={productData._id}
-        />
+      {/* CART BUTTON */}
+      <div className="mt-2 w-full pt-4 border-t border-gray-100 dark:border-gray-700">
+        <CartButton productId={productData._id as any} />
       </div>
     </Card>
   );

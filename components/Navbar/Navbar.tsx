@@ -18,16 +18,16 @@ export function Navbar() {
   const linkClass = (path: string) =>
     `transition-all duration-200 ${
       pathname === path
-        ? "text-emerald-400 font-semibold"
-        : "text-slate-300 hover:text-white"
+        ? "text-amber-400 font-bold"
+        : "text-zinc-300 hover:text-white"
     }`
 
   return (
-    <NavigationMenu className="fixed top-0 w-full h-20 flex items-center justify-between px-10 bg-slate-700 backdrop-blur-md border-b border-white/10 z-50">
+    <NavigationMenu className="fixed top-0 w-full h-20 flex items-center justify-between px-10 bg-zinc-700 backdrop-blur-md border-b border-white/10 z-50">
       
       {/* Logo */}
       <div className="text-xl font-bold tracking-tight text-white">
-        Eco<span className="text-emerald-400">Max</span>
+        Eco<span className="text-amber-400">Max</span>
       </div>
 
       {/* Links */}

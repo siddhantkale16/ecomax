@@ -15,7 +15,7 @@ export async function GET(request:NextRequest,{params}:{params:Promise<{id:strin
           category:1,
           description:1,
           image:1,
-         
+          discount:1,
           rating:1,
         }})
         if(!products){

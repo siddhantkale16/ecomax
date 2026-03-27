@@ -28,7 +28,7 @@ export const CartButton = ({ productId }: CartButtonProps) => {
         e.stopPropagation();
         handleAdd();
       }}
-      className=" cursor-pointer w-full bg-emerald-400 hover:bg-emerald-600 text-white font-semibold py-5 rounded-lg transition"
+      className=" cursor-pointer w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-5 rounded-lg transition"
     >
       Add to Cart
     </Button>
@@ -51,7 +51,7 @@ export const CartButton = ({ productId }: CartButtonProps) => {
           e.stopPropagation();
           handleIncrease();
         }}
-        className="w-1/3 text-lg font-bold bg-green-500 text-white rounded cursor-pointer"
+        className="w-1/3 text-lg font-bold bg-amber-600 text-white rounded cursor-pointer"
       >
         +
       </Button>

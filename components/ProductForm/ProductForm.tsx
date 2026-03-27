@@ -38,7 +38,7 @@ export default function ProductForm({
     try {
       await onSubmit(formData);
 
-      setMessage("Successfully Added Product!");
+      setMessage("Successfully Added/Updated Product!");
 
       // Reset only if it's ADD mode
       if (!initialData) {
@@ -61,7 +61,7 @@ export default function ProductForm({
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="w-full max-w-lg bg-white shadow-lg rounded-xl p-8">
-        <h1 className="text-3xl font-bold text-emerald-400 mb-6 text-center">
+        <h1 className="text-3xl font-bold text-amber-400 mb-6 text-center">
           {titleText}
         </h1>
 
@@ -140,7 +140,7 @@ export default function ProductForm({
           <div className="mt-4 text-center">
             <Button
               type="submit"
-              className={`w-full bg-emerald-400 hover:bg-emerald-600 text-white font-semibold p-6 rounded-lg transition ${
+              className={`w-full bg-amber-400 hover:bg-amber-600 text-white font-semibold p-6 rounded-lg transition ${
                 isSubmitting ? "opacity-50 cursor-not-allowed" : ""
               }`}
               disabled={isSubmitting}

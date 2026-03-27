@@ -24,8 +24,8 @@ export const SearchBar = ({defaultValue}:{defaultValue:string})=>{
                     setQuery(e.target.value);
                 }}
                 value={query}
-                placeholder="search for products" className="text-slate-200 placeholder:text-slate-400 p-7 bg-slate-700"/>
-                <Button type="submit" className="bg-emerald-500 hover:bg-emerald-600 p-7"><Search/></Button>
+                placeholder="search for products" className="text-zinc-200 placeholder:text-zinc-400 p-7 bg-zinc-700"/>
+                <Button type="submit" className="bg-amber-600 hover:bg-amber-700 p-7"><Search/></Button>
                 </form>
             </div>
             </section>)

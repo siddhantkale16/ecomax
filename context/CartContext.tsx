@@ -16,6 +16,7 @@ interface CartContextType {
   getItemQuantity: (id: ObjectId) => number;
 }
 
+
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {

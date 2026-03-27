@@ -34,7 +34,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
               key={cat}
               href={`/products?query=${encodeURIComponent(query)}${cat !== 'All' ? `&category=${cat.toLowerCase()}` : ''}`}
               className={`px-4 py-2 rounded-full border text-sm whitespace-nowrap
-                ${isActive ? 'bg-emerald-400 text-white ' : 'bg-white text-gray-700 border-gray-700 hover:bg-emerald-400'}`}
+                ${isActive ? 'bg-amber-600 text-white shadow-md shadow-amber-600/20' : 'bg-white text-gray-700 border-gray-700 hover:bg-amber-600 hover:text-white transition'}`}
             >
               {cat}
             </Link>

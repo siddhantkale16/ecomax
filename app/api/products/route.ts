@@ -10,6 +10,7 @@ export async function GET(){
           category:1,
           image:1,
           rating:1,
+          discount:1,
         }).toArray();
         return new Response(JSON.stringify(products), {
       status: 200,

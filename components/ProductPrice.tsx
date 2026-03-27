@@ -19,7 +19,7 @@ export const ProductPrice = ({
   
   const discountFactor = (1 - productDiscount / 100) * (1 - globalDiscount / 100);
   const finalPrice = basePrice * discountFactor;
-  const hasAnyDiscount = productDiscount > 0 || globalDiscount > 0;
+  const hasAnyDiscount = (productDiscount > 0 || globalDiscount > 0) && finalPrice < basePrice;
 
   const sizeClasses = {
     sm: "text-sm",
@@ -36,15 +36,16 @@ export const ProductPrice = ({
   };
 
   return (
-    <div className={`flex flex-col items-start leading-tight ${className}`}>
+    <div className={`flex flex-row items-baseline gap-2 leading-none ${className}`}>
+      <span className={`${sizeClasses[size]} text-indigo-400 dark:text-indigo-300 font-bold tracking-tight`}>
+        ${finalPrice.toFixed(2)}
+      </span>
+
       {hasAnyDiscount && (
-        <span className={`${oldSizeClasses[size]} text-red-500 line-through opacity-70`}>
+        <span className={`${oldSizeClasses[size]} text-zinc-500 line-through decoration-zinc-200`}>
           ${basePrice.toFixed(2)}
         </span>
       )}
-      <span className={`${sizeClasses[size]} text-amber-600 font-extrabold`}>
-        ${finalPrice.toFixed(2)}
-      </span>
     </div>
   );
 };

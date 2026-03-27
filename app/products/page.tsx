@@ -1,59 +1,82 @@
+import { Product } from "@/types/Product";
 import { ProductCard } from "@/components/ProductCard/ProductCard";
 import { SearchBar } from "@/components/SearchBar/SearchBar";
-import { Product } from "@/types/Product";
 import Link from "next/link";
 
-export default async function ProductsPage({ searchParams }: { searchParams: Promise<{ query?: string; category?: string }> }) {
-  const search = await searchParams;
-  const query = search.query || "";
-  const selectedCategory = search.category || "All";
-  console.log(selectedCategory);
-
+export default async function ProductsPage({ 
+    searchParams 
+}: { 
+    searchParams: Promise<{ category?: string, query?: string }> 
+}) {
+  const { category, query: rawQuery } = await searchParams;
+  const query = rawQuery?.toLowerCase() || "";
+  
   const res = await fetch("http://localhost:3000/api/products", { cache: "no-store" });
   const products: Product[] = await res.json();
 
-  const categories = ['All', "Men's clothing", "Women's Clothing", 'Electronics', 'Jewelery'];
+  let filteredProducts = products;
 
-  
-  const filteredProducts = products.filter((product) => {
-    const matchesQuery = product.title.toLowerCase().includes(query.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || product.category.toLowerCase() ===(selectedCategory.toLowerCase());
-    return matchesQuery && matchesCategory;
-  });
+  // Category Filtering
+  if (category && category !== "all") {
+    filteredProducts = filteredProducts.filter(p => p.category.toLowerCase() === category.toLowerCase());
+  }
+
+  // Search Filtering
+  if (query) {
+    filteredProducts = filteredProducts.filter(p => 
+      p.title.toLowerCase().includes(query) || 
+      (p.description && p.description.toLowerCase().includes(query)) ||
+      p.category.toLowerCase().includes(query)
+    );
+  }
+
+  const categories = ["all", ...new Set(products.map(p => p.category.toLowerCase()))];
 
   return (
-    <div className="p-8">
-      <SearchBar defaultValue={query} />
-
-      
-      <div className="flex gap-8 mt-3  justify-center">
-        {categories.map((cat) => {
-          const isActive = selectedCategory.toLowerCase() === cat.toLowerCase();
-          return (
-            <Link
-              key={cat}
-              href={`/products?query=${encodeURIComponent(query)}${cat !== 'All' ? `&category=${cat.toLowerCase()}` : ''}`}
-              className={`px-4 py-2 rounded-full border text-sm whitespace-nowrap
-                ${isActive ? 'bg-amber-600 text-white shadow-md shadow-amber-600/20' : 'bg-white text-gray-700 border-gray-700 hover:bg-amber-600 hover:text-white transition'}`}
-            >
-              {cat}
-            </Link>
-          );
-        })}
-      </div>
-
-      {/* Products Grid */}
-      <section id="products" className="mt-6 flex justify-center w-full">
-        <div className="w-2/3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
-              <ProductCard key={product._id as unknown as string} productData={product} />
-            ))
-          ) : (
-            <p className="col-span-full text-center text-gray-500">No products found.</p>
-          )}
+    <div className="min-h-screen bg-zinc-700 p-6 md:p-12 lg:p-20">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12">
+          <div className="space-y-4">
+            <h1 className="text-6xl font-black text-zinc-100 tracking-tighter">All Products.</h1>
+            <p className="text-zinc-500 font-medium text-lg max-w-md">Discover our premium range of essential items.</p>
+          </div>
+          
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <Link
+                key={cat}
+                href={`/products?category=${cat}${query ? `&query=${query}` : ''}`}
+                className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
+                  (category === cat || (!category && cat === "all"))
+                    ? "bg-primary border-primary text-white shadow-indigo-glow"
+                    : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:text-zinc-100 hover:border-zinc-700"
+                }`}
+              >
+                {cat}
+              </Link>
+            ))}
+          </div>
         </div>
-      </section>
+
+        {/* Restore Search Bar */}
+        <div className="mb-16">
+            <SearchBar defaultValue={query} />
+        </div>
+
+        {/* Results Grid - 3 columns, square cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {filteredProducts.map((product) => (
+            <ProductCard key={product._id as unknown as string} productData={product} />
+          ))}
+        </div>
+
+        {filteredProducts.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-32 text-zinc-600">
+            <span className="text-8xl font-black opacity-10 mb-4 tracking-tighter text-zinc-400">NO RESULTS.</span>
+            <p className="text-lg font-bold">Try adjusting your search or filters.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

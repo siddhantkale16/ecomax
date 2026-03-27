@@ -12,9 +12,10 @@ export const FlatDiscountButton = () => {
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="bg-yellow-500 hover:bg-yellow-400 text-white rounded-full p-5 transition flex items-center justify-center"
+        className="bg-zinc-900 border border-zinc-800 hover:border-primary/50 text-primary rounded-2xl p-4 transition-all flex items-center justify-center shadow-lg hover:shadow-indigo-glow group"
+        title="Global Discount"
       >
-        <Tag size={28} />
+        <Tag size={28} className="group-hover:scale-110 transition-transform" />
       </button>
 
       {isModalOpen && <FlatDiscountModal onClose={() => setIsModalOpen(false)} />}

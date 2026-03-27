@@ -6,6 +6,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { ObjectId } from "mongodb"
 import { ProductPrice } from "@/components/ProductPrice"
+import { Button } from "@/components/ui/button"
+import { ShoppingBag, ArrowLeft, Trash2, X } from "lucide-react"
 
 interface Product {
   _id: ObjectId
@@ -43,122 +45,147 @@ export default function CartPage() {
 
   if (cart.length === 0)
     return (
-      <div className="flex flex-col items-center justify-center h-[70vh] text-center px-4">
-        <div className="text-6xl mb-6">🛒</div>
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800 dark:text-gray-100">
+      <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4 bg-zinc-800">
+        <div className="relative mb-8">
+            <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-150 animate-pulse"></div>
+            <ShoppingBag className="w-20 h-20 text-zinc-700 relative z-10" />
+        </div>
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-zinc-100 tracking-tight">
           Your cart is empty
         </h2>
-        <p className="text-gray-500 dark:text-gray-400 mb-6 text-lg md:text-xl">
-          Looks like you haven't added any products yet.
+        <p className="text-zinc-500 mb-8 text-lg md:text-xl font-medium max-w-md">
+          Looks like you haven't added anything yet. Browse our products to find what you need.
         </p>
-        <Link
-          href="/products"
-          className="px-6 py-3 bg-amber-600 text-white rounded-lg text-lg font-semibold hover:bg-amber-700 transition"
-        >
-          Start Shopping
+        <Link href="/products">
+          <Button className="px-10 py-7 bg-primary hover:bg-indigo-600 text-white rounded-2xl text-lg font-bold shadow-indigo-glow transition-all hover:scale-105 active:scale-95">
+            Start Shopping
+          </Button>
         </Link>
       </div>
     )
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6 md:p-10">
-      <h2 className="text-3xl font-bold mb-8 text-center md:text-left">Your Cart</h2>
+    <div className="w-full min-h-screen bg-zinc-800 p-6 md:p-12 lg:p-20">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex items-center gap-4 mb-12">
+            <Link href="/products" className="p-3 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-400 hover:text-zinc-100 transition-colors">
+                <ArrowLeft size={20} />
+            </Link>
+            <h1 className="text-4xl md:text-5xl font-black text-zinc-100 tracking-tighter">Shopping Cart.</h1>
+        </div>
+ 
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
+          {/* Products List */}
+          <div className="w-full lg:w-1/2 space-y-6">
+            {products.map((product) => {
+              const quantity = cart.find((c) => c.id === product._id)?.quantity || 0
+              const productDiscount = product.discount || 0
+              
+              return (
+                <div
+                  key={product._id as unknown as string}
+                  className="glass-card flex items-center gap-6 p-6 rounded-[2rem] shadow-indigo-glow hover:shadow-indigo-glow-strong transition-all duration-300 group"
+                >
+                  {/* Image */}
+                  <div className="w-24 h-24 relative flex-shrink-0 bg-white rounded-2xl p-3 shadow-inner group-hover:scale-105 transition-transform">
+                    <Image
+                      src={product.image}
+                      alt={product.title}
+                      fill
+                      className="object-contain"
+                      sizes="96px"
+                    />
+                  </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Products List */}
-        <div className="flex-1 space-y-6">
-          {products.map((product) => {
-            const quantity = cart.find((c) => c.id === product._id)?.quantity || 0
-            const productDiscount = product.discount || 0
-            // We use ProductPrice here for display consistency
-            
-            return (
-              <div
-                key={product._id as unknown as string}
-                className="flex items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition"
-              >
-                {/* Image */}
-                <div className="w-24 h-24 relative flex-shrink-0">
-                  <Image
-                    src={product.image}
-                    alt={product.title}
-                    fill
-                    className="object-contain rounded-lg border border-gray-200 dark:border-gray-700 bg-white"
-                  />
-                </div>
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-lg text-zinc-100 line-clamp-1 truncate">{product.title}</h3>
+                    <div className="mt-1">
+                      <ProductPrice basePrice={product.price} productDiscount={productDiscount} size="md" />
+                    </div>
+                  </div>
 
-                {/* Info */}
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg line-clamp-2">{product.title}</h3>
-                  <div className="mt-1">
-                    <ProductPrice basePrice={product.price} productDiscount={productDiscount} size="lg" />
+                  {/* Quantity Controls */}
+                  <div className="flex flex-col items-end gap-3 flex-shrink-0">
+                    <button 
+                        onClick={() => removeFromCart(product._id)}
+                        className="text-zinc-600 hover:text-red-500 transition-colors"
+                    >
+                        <X size={18} />
+                    </button>
+                    
+                    <div className="flex items-center gap-3 bg-zinc-900 border border-zinc-800 rounded-xl p-1 shadow-inner">
+                        <button
+                            onClick={() =>
+                                quantity <= 1
+                                    ? removeFromCart(product._id)
+                                    : updateQuantity(product._id, quantity - 1)
+                            }
+                            className="w-8 h-8 flex items-center justify-center bg-zinc-800 text-zinc-100 rounded-lg hover:bg-zinc-700 transition"
+                        >
+                            -
+                        </button>
+                        <span className="font-bold text-lg text-zinc-100 w-6 text-center">{quantity}</span>
+                        <button
+                            onClick={() => addToCart(product._id, 1)}
+                            className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-lg shadow-indigo-glow hover:bg-indigo-600 transition"
+                        >
+                            +
+                        </button>
+                    </div>
                   </div>
                 </div>
+              )
+            })}
+            
+            {cart.length > 0 && (
+                <button
+                    onClick={clearCart}
+                    className="flex items-center gap-2 text-zinc-600 hover:text-red-500 transition-colors font-bold uppercase tracking-widest text-[10px] ml-4 py-2"
+                >
+                    <Trash2 size={12} />
+                    Clear Cart
+                </button>
+            )}
+          </div>
 
-                {/* Quantity Controls */}
-                <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg p-1 border border-gray-100 dark:border-gray-600">
-                  <button
-                    onClick={() =>
-                      quantity <= 1
-                        ? removeFromCart(product._id)
-                        : updateQuantity(product._id, quantity - 1)
-                    }
-                    className="w-8 h-8 flex items-center justify-center bg-white dark:bg-gray-600 text-gray-800 dark:text-white rounded shadow-sm hover:bg-gray-100 dark:hover:bg-gray-500 transition cursor-pointer font-bold"
-                  >
-                    -
-                  </button>
-                  <span className="font-bold w-6 text-center">{quantity}</span>
-                  <button
-                    onClick={() => addToCart(product._id, 1)}
-                    className="w-8 h-8 flex items-center justify-center bg-amber-600 text-white rounded shadow-sm hover:bg-amber-700 transition cursor-pointer font-bold"
-                  >
-                    +
-                  </button>
+          {/* Summary / Checkout Panel */}
+          <div className="w-full lg:w-1/2 glass-card p-10 rounded-[2.5rem] shadow-indigo-glow-strong flex flex-col gap-8 h-fit lg:sticky lg:top-32 border-primary/10">
+            <h3 className="text-2xl font-black text-zinc-100 tracking-tight">Order Summary.</h3>
+            
+            <div className="space-y-4 pb-8 border-b border-zinc-900">
+              <div className="flex justify-between text-zinc-500 font-bold text-sm tracking-wide uppercase">
+                <span>Total Items</span>
+                <span className="text-zinc-100">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
+              </div>
+              
+              {flatDiscount > 0 && (
+                <div className="flex justify-between text-primary font-black text-sm tracking-wide uppercase">
+                  <span>Discount</span>
+                  <span>-{flatDiscount}%</span>
+                </div>
+              )}
+
+              <div className="flex justify-between items-end pt-6">
+                <div className="flex flex-col">
+                    <span className="text-zinc-500 font-bold text-[10px] uppercase tracking-[0.2em] mb-1">Subtotal</span>
+                    <span className="text-4xl font-black text-zinc-100 tracking-tighter">${totalPrice.toFixed(2)}</span>
                 </div>
               </div>
-            )
-          })}
-        </div>
-
-        {/* Summary / Checkout Panel */}
-        <div className="w-full lg:w-1/3 p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-lg flex flex-col gap-6 h-fit sticky top-24">
-          <h3 className="text-2xl font-bold">Order Summary</h3>
-          
-          <div className="space-y-3 pb-6 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex justify-between text-gray-600 dark:text-gray-400">
-              <span>Total Items:</span>
-              <span className="font-semibold text-gray-900 dark:text-white">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
             </div>
-            {flatDiscount > 0 && (
-              <div className="flex justify-between text-amber-700">
-                <span>EcoMax Special:</span>
-                <span className="font-bold">-{flatDiscount}%</span>
-              </div>
-            )}
-            <div className="flex justify-between text-xl font-bold mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-              <span>Total Price:</span>
-              <span className="text-amber-700">${totalPrice.toFixed(2)}</span>
+
+            <div className="flex flex-col gap-4">
+              <Link href="/checkout" className="w-full">
+                <Button className="w-full py-6 bg-primary hover:bg-indigo-600 text-white font-black text-lg rounded-xl shadow-indigo-glow transition-all hover:scale-[1.02] active:scale-95">
+                  Checkout Now
+                </Button>
+              </Link>
+              
+              <Link href="/products" className="text-center text-zinc-500 hover:text-primary transition-colors font-bold uppercase tracking-widest text-[10px] mt-2">
+                Continue Shopping
+              </Link>
             </div>
           </div>
-
-          <div className="flex flex-col gap-3">
-            <Link href="/checkout" className="w-full">
-              <button className="w-full py-4 bg-amber-600 text-white font-bold rounded-xl hover:bg-amber-700 transition shadow-lg shadow-amber-600/20 active:scale-[0.98]">
-                Proceed to Checkout
-              </button>
-            </Link>
-
-            <button
-              onClick={clearCart}
-              className="w-full py-3 bg-white dark:bg-gray-800 text-red-500 font-semibold rounded-xl border border-red-100 dark:border-red-900/30 hover:bg-red-50 dark:hover:bg-red-900/10 transition active:scale-[0.98]"
-            >
-              Clear Cart
-            </button>
-          </div>
-
-          <Link href="/products" className="text-center text-amber-600 text-sm font-semibold hover:underline mt-2">
-            Continue Shopping
-          </Link>
         </div>
       </div>
     </div>

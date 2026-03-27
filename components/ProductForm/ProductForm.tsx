@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function ProductForm({
   initialData,
@@ -38,7 +39,7 @@ export default function ProductForm({
     try {
       await onSubmit(formData);
 
-      setMessage("Successfully Added/Updated Product!");
+      setMessage("Product successfully saved.");
 
       // Reset only if it's ADD mode
       if (!initialData) {
@@ -52,110 +53,107 @@ export default function ProductForm({
       }
     } catch (err) {
       console.error(err);
-      setMessage("Something went wrong.");
+      setMessage("Failed to save product.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-lg bg-white shadow-lg rounded-xl p-8">
-        <h1 className="text-3xl font-bold text-amber-400 mb-6 text-center">
-          {titleText}
+    <div className="min-h-screen flex items-center justify-center bg-zinc-700 p-6 md:p-12">
+      <div className="w-full max-w-2xl glass-card rounded-[3rem] p-10 md:p-14 shadow-2xl border-primary/10 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-3xl -mr-32 -mt-32"></div>
+        
+        <h1 className="text-4xl font-black text-zinc-100 mb-10 text-center tracking-tighter">
+          {titleText}.
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-8">
           {/* Title */}
-          <div>
-            <label className="block mb-2 font-semibold text-gray-700">Title</label>
-            <input
+          <div className="space-y-2">
+            <label className="text-[12px] font-black text-slate-200 uppercase tracking-[0.3em] ml-2">Product Name</label>
+            <Input
               type="text"
               name="title"
               value={formData.title}
               onChange={handleChange}
               placeholder="Enter product title"
-              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               required
             />
           </div>
 
           {/* Description */}
-          <div>
-            <label className="block mb-2 font-semibold text-gray-700">Description</label>
+          <div className="space-y-2">
+            <label className="text-[12px] font-black text-slate-200 uppercase tracking-[0.3em] ml-2">Description</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Enter product description"
-              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              rows={4}
+              placeholder="Describe the product..."
+              className="w-full bg-zinc-900 border border-zinc-800 text-zinc-100 rounded-2xl px-5 py-4 min-h-37.5 focus:ring-2 focus:ring-primary/20 transition-all outline-none"
               required
             />
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Price */}
+            <div className="space-y-2">
+                <label className="text-[12px] font-black text-slate-200 uppercase tracking-[0.3em] ml-2">Price ($)</label>
+                <Input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                placeholder="0.00"
+                required
+                />
+            </div>
+
+            {/* Category */}
+            <div className="space-y-2">
+                <label className="text-[12px] font-black text-slate-200 uppercase tracking-[0.3em] ml-2">Category</label>
+                <Input
+                type="text"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                placeholder="Category"
+                required
+                />
+            </div>
+          </div>
+
           {/* Image URL */}
-          <div>
-            <label className="block mb-2 font-semibold text-gray-700">Image URL</label>
-            <input
+          <div className="space-y-2">
+            <label className="text-[12px] font-black text-slate-200 uppercase tracking-[0.3em] ml-2">Image URL</label>
+            <Input
               type="text"
               name="image"
               value={formData.image}
               onChange={handleChange}
-              placeholder="https://example.com/image.jpg"
-              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              required
-            />
-          </div>
-
-          {/* Price */}
-          <div>
-            <label className="block mb-2 font-semibold text-gray-700">Price ($)</label>
-            <input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              placeholder="0.00"
-              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              required
-            />
-          </div>
-
-          {/* Category */}
-          <div>
-            <label className="block mb-2 font-semibold text-gray-700">Category</label>
-            <input
-              type="text"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              placeholder="Enter product category"
-              className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              placeholder="https://assets.ecomax.com/image.jpg"
               required
             />
           </div>
 
           {/* Submit */}
-          <div className="mt-4 text-center">
+          <div className="mt-10 pt-4">
             <Button
               type="submit"
-              className={`w-full bg-amber-400 hover:bg-amber-600 text-white font-semibold p-6 rounded-lg transition ${
-                isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-              }`}
               disabled={isSubmitting}
+              className="w-full py-6 bg-primary hover:bg-indigo-600 text-white font-black text-lg rounded-xl shadow-indigo-glow transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-70"
             >
               {isSubmitting
-                ? "Saving..."
+                ? "SAVING..."
                 : initialData
-                ? "Update Product"
-                : "Add Product"}
+                ? "UPDATE PRODUCT"
+                : "ADD PRODUCT"}
             </Button>
           </div>
 
           {/* Message */}
           {message && (
-            <p className="text-center mt-4 font-semibold text-gray-700">
+            <p className={`text-center mt-6 font-bold text-xs uppercase tracking-widest ${message.includes('success') ? 'text-primary' : 'text-zinc-500'}`}>
               {message}
             </p>
           )}
